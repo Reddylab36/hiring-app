@@ -6,7 +6,7 @@ pipeline{
     stages{
         stage('checkout the code'){
             steps{
-                git url:'https://github.com/bcreddydevops/chinna-app.git', branch: 'main'
+                git url:'https://github.com/Reddylab36/hiring-app.git', branch: 'main'
             }
         }
         stage('build the code'){
@@ -16,7 +16,7 @@ pipeline{
         }
         stage('Generate sonarqube-analysis'){
             steps{
-                withSonarQubeEnv(installationName: 'sonarqube-8', credentialsId: 'jenkins-sonar-token') {
+                withSonarQubeEnv(installationName: 'sonarqube-6.6', credentialsId: 'sonarqube-declarative') {
                  sh 'mvn sonar:sonar'
                 }
             }
@@ -25,19 +25,19 @@ pipeline{
             steps{
              nexusArtifactUploader artifacts: [
                  [
-                     artifactId: 'devops', 
+                     artifactId: 'hiring', 
                      classifier: '', 
-                     file: 'target/hiring.war', 
+                     file: 'declarative-job', 
                      type: 'war'
                 ]
             ], 
-            credentialsId: 'nexus-credentials', 
+            credentialsId: 'nexus-server-2', 
             groupId: 'in.javahome', 
-            nexusUrl: '52.90.34.45:8081', 
+            nexusUrl: '44.222.255.147:8081', 
             nexusVersion: 'nexus3', 
             protocol: 'http', 
-            repository: 'spring-initial', 
-            version: '0.0.1'
+            repository: 'declarative-job', 
+            version: '0.1'
             }
         }
 		stage('Deploy War file to Tommcat'){
