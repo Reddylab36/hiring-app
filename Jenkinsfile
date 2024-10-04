@@ -15,9 +15,14 @@ pipeline {
         }
         stage('Docker Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
-    sh 'docker login -u $DOCKER_USER -p $DOCKER_PASSWORD'
-}
+                stage('Docker Push') {
+            steps {
+                withCredentials([string(credentialsId: 'docker-hub', variable: 'hubPwd')]) {
+                    sh "docker login -u rajashekhar36 -p ${hubPwd}"
+                    sh "docker push rajashekhar36/new-argo-image:$BUILD_NUMBER"
+                }
+            }
+        }
             }
         }
         stage('Checkout K8S manifest SCM'){
