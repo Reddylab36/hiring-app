@@ -16,7 +16,7 @@ pipeline{
         }
         stage('Generate sonarqube-analysis'){
             steps{
-                withSonarQubeEnv(installationName: 'sonarqube-6.6', credentialsId: 'sonarqube-declarative') {
+                withSonarQubeEnv(installationName: 'sonarqube-6.6', credentialsId: 'sonar-token') {
                  sh 'mvn sonar:sonar'
                 }
             }
@@ -27,29 +27,17 @@ pipeline{
                  [
                      artifactId: 'hiring', 
                      classifier: '', 
-                     file: 'declarative-job', 
+                     file: 'techie-horizon', 
                      type: 'war'
                 ]
             ], 
             credentialsId: 'nexus-server-2', 
             groupId: 'in.javahome', 
-            nexusUrl: '44.222.255.147:8081', 
+            nexusUrl: '3.101.56.142:8081', 
             nexusVersion: 'nexus3', 
             protocol: 'http', 
-            repository: 'declarative-job', 
+            repository: 'techie-horizon', 
             version: '0.1'
-            }
-        }
-		stage('Deploy War file to Tommcat'){
-            steps{
-               sshagent(['tomcat-credentials']) {
-                  sh """
-                    scp -o StrictHostKeyChecking=no target/*.war ubuntu@54.173.252.57:/opt/apache-tomcat-9.0.72/webapps
-                    ssh -o StrictHostKeyChecking=no ubuntu@54.173.252.57 /opt/apache-tomcat-9.0.72/bin/shutdown.sh
-                    ssh -o StrictHostKeyChecking=no ubuntu@54.173.252.57 /opt/apache-tomcat-9.0.72/bin/startup.sh
-					
-		          """          
-               }
             }
         }
     }   
