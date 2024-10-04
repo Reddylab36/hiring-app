@@ -1,7 +1,7 @@
 pipeline{
     agent any
     tools{
-        maven 'maven-3.9.9'
+        maven 'MVN_HOME'
     }
     stages{
         stage('checkout the code'){
@@ -16,7 +16,7 @@ pipeline{
         }
         stage('Generate sonarqube-analysis'){
             steps{
-                withSonarQubeEnv(installationName: 'Sonarqube-', credentialsId: 'sonar-token') {
+                withSonarQubeEnv(installationName: 'Sonarqube-server', credentialsId: 'sonar-token') {
                  sh 'mvn sonar:sonar'
                 }
             }
