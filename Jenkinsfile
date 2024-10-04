@@ -15,8 +15,6 @@ pipeline {
         }
         stage('Docker Push') {
             steps {
-                stage('Docker Push') {
-            steps {
                 withCredentials([string(credentialsId: 'docker-hub', variable: 'hubPwd')]) {
                     sh "docker login -u rajashekhar36 -p ${hubPwd}"
                     sh "docker push rajashekhar36/new-argo-image:$BUILD_NUMBER"
