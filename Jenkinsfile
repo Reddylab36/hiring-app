@@ -15,15 +15,14 @@ pipeline {
         }
         stage('Docker Push') {
             steps {
-                withCredentials([string(credentialsId: 'docker-hub', variable: 'hubPwd')]) {
-                    sh "docker login -u rajashekhar36 -p ${hubPwd}"
-                    sh "docker push rajashekhar36/new-argo-image:$BUILD_NUMBER"
-                }
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+    sh 'docker login -u $DOCKER_USER -p $DOCKER_PASSWORD'
+}
             }
         }
         stage('Checkout K8S manifest SCM'){
             steps {
-              git branch: 'main', url: 'https://github.com/Reddylab36/hiring-app.git'
+              git branch: 'main', url: 'https://github.com/betawins/Hiring-app-argocd.git'
             }
         } 
         stage('Update K8S manifest & push to Repo'){
@@ -37,7 +36,7 @@ pipeline {
                         git add .
                         git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
                         git remote -v
-                        git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/betawins/Hiring-app-argocd.git main
+                        git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/Reddylab36/Hiring-app-argocd.git main
                         '''                        
                       }
                   }
