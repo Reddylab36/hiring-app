@@ -27,7 +27,7 @@ pipeline{
                  [
                      artifactId: 'hiring', 
                      classifier: '', 
-                     file: 'techie-horizon', 
+                     file: '/var/lib/jenkins/workspace/hiring-app/target/hiring.war', 
                      type: 'war'
                 ]
             ], 
